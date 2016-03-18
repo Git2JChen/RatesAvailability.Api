@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RateAvail.Api", "RateAvail.Api\RateAvail.Api.csproj", "{ED638DD5-E755-4B7A-940D-5C94AB425686}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RateAvail.Api", "src\RateAvail.Api\RateAvail.Api.csproj", "{ED638DD5-E755-4B7A-940D-5C94AB425686}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
