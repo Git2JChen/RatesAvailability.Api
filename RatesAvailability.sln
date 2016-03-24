@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RateAvail.Api", "src\RateAvail.Api\RateAvail.Api.csproj", "{ED638DD5-E755-4B7A-940D-5C94AB425686}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit.Tests", "tests\Unit.Tests\Unit.Tests.csproj", "{9B58BA0A-D151-454A-B015-78EB3FE5EF79}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F1487CD4-7200-40C4-B019-81A29113F181}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,8 +17,15 @@ Global
 		{ED638DD5-E755-4B7A-940D-5C94AB425686}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED638DD5-E755-4B7A-940D-5C94AB425686}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED638DD5-E755-4B7A-940D-5C94AB425686}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B58BA0A-D151-454A-B015-78EB3FE5EF79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B58BA0A-D151-454A-B015-78EB3FE5EF79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B58BA0A-D151-454A-B015-78EB3FE5EF79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B58BA0A-D151-454A-B015-78EB3FE5EF79}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9B58BA0A-D151-454A-B015-78EB3FE5EF79} = {F1487CD4-7200-40C4-B019-81A29113F181}
 	EndGlobalSection
 EndGlobal

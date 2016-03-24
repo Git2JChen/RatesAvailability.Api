@@ -8,7 +8,7 @@
         {
             Get["/"] = parameters =>
             {
-                return View["index"];
+                return "OK";
             };
         }
     }
