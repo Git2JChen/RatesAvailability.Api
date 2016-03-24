@@ -1,6 +1,7 @@
 ﻿using Nancy;
 using Nancy.Testing;
 using NUnit.Framework;
+using RateAvail.Api;
 
 namespace Unit.Tests
 {
@@ -11,8 +12,7 @@ namespace Unit.Tests
         public void Should_return_status_ok_when_route_exists()
         {
             // Arrange
-            var bootstrapper = new DefaultNancyBootstrapper();
-            var browser = new Browser(bootstrapper);
+            var browser = new Browser(with => with.Module(new IndexModule()));
 
             // Act
             var result = browser.Get("/", with =>
@@ -21,7 +21,7 @@ namespace Unit.Tests
             });
 
             // Assert
-            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
     }
 }
