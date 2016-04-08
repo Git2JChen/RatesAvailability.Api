@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RateAvail.Api", "src\RateAvail.Api\RateAvail.Api.csproj", "{ED638DD5-E755-4B7A-940D-5C94AB425686}"
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatesAvail.Api", "src\RatesAvail.Api\RatesAvail.Api.csproj", "{ED638DD5-E755-4B7A-940D-5C94AB425686}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit.Tests", "tests\Unit.Tests\Unit.Tests.csproj", "{9B58BA0A-D151-454A-B015-78EB3FE5EF79}"
 EndProject
