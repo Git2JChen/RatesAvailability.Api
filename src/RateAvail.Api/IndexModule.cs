@@ -1,4 +1,5 @@
-﻿using Nancy;
+﻿using System;
+using Nancy;
 
 namespace RateAvail.Api
 {
@@ -9,6 +10,11 @@ namespace RateAvail.Api
             Get["/"] = parameters =>
             {
                 return "Nancy.HttpStatusCode is OK";
+            };
+
+            Get["/RatesAvail"] = parameters =>
+            {
+                throw new NotImplementedException();
             };
         }
     }
