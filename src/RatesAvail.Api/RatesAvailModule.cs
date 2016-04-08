@@ -1,11 +1,10 @@
-﻿using System;
-using Nancy;
+﻿using Nancy;
 
 namespace RateAvail.Api
 {
-    public class IndexModule : NancyModule
+    public class RatesAvailModule : NancyModule
     {
-        public IndexModule()
+        public RatesAvailModule()
         {
             Get["/"] = parameters =>
             {

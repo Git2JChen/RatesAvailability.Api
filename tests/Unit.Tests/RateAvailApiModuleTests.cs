@@ -13,7 +13,7 @@ namespace Unit.Tests
         public void Should_return_status_ok_when_route_exists()
         {
             // Arrange
-            var browser = new Browser(with => with.Module(new IndexModule()));
+            var browser = new Browser(with => with.Module(new RatesAvailModule()));
 
             // Act
             var result = browser.Get("/", with =>
@@ -29,7 +29,7 @@ namespace Unit.Tests
         public void Should_return_Availablity_type()
         {
             // Arrange
-            var browser = new Browser(with => with.Module(new IndexModule()));
+            var browser = new Browser(with => with.Module(new RatesAvailModule()));
 
             // Act
             var result = browser.Get("/RatesAvail", with =>
