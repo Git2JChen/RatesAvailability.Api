@@ -13,7 +13,19 @@ namespace RateAvail.Api
 
             Get["/RatesAvail"] = parameters =>
             {
-                return "{}";
+                const string ratesAvail =
+                    "{" +
+                        "\"availabilities\":[" +
+                            "{" +
+                                "\"availability\":[" +
+                                    "{" +
+                                    "}" +
+                                "]" +
+                            "}" +
+                        "]" +
+                    "}";
+
+                return ratesAvail;
             };
         }
     }

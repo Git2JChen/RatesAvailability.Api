@@ -1,8 +1,11 @@
-﻿using Nancy;
+﻿using FluentAssertions;
+using Nancy;
 using Nancy.Testing;
 using NUnit.Framework;
 using RateAvail.Api;
 using RateAvail.Api.Response;
+using Newtonsoft.Json;
+//using Response = Nancy.Response;
 
 namespace Unit.Tests
 {
@@ -26,7 +29,7 @@ namespace Unit.Tests
         }
 
         [Test]
-        public void Should_return_Availablity_type()
+        public void Should_return_Response_type()
         {
             // Arrange
             var browser = new Browser(with => with.Module(new RatesAvailModule()));
@@ -37,10 +40,35 @@ namespace Unit.Tests
                 with.HttpRequest();
             });
 
-            var availJson = result.Body.DeserializeJson<Availability>();
+            var response = result.Body.DeserializeJson<RatesResponse>();
 
             // Assert
-            Assert.That(availJson, Is.TypeOf<Availability>());
+            Assert.That(response, Is.TypeOf<RatesResponse>());
+        }
+
+        [Test]
+        public void Should_return_Availablity_with_JSon_schema_expected()
+        {
+            // Arrange
+            var browser = new Browser(with => with.Module(new RatesAvailModule()));
+            const string jsonStringExpected =
+                "{" +
+                    "\"availability\":[" +
+                        "{" +
+                        "}" +
+                    "]" +
+                "}";
+
+            // Act
+            var result = browser.Get("/RatesAvail", with =>
+            {
+                ;
+            });
+
+            var actualJsonString = JsonConvert.SerializeObject(result.Body.DeserializeJson<RatesResponse>());
+
+            // Assert
+            actualJsonString.Should().Be(jsonStringExpected);
         }
     }
 }
