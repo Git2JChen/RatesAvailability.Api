@@ -14,7 +14,7 @@ namespace RateAvail.Api
 
             Get["/RatesAvail"] = parameters =>
             {
-                throw new NotImplementedException();
+                return "{}";
             };
         }
     }
