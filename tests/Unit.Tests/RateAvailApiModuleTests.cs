@@ -5,7 +5,6 @@ using NUnit.Framework;
 using RateAvail.Api;
 using RateAvail.Api.Response;
 using Newtonsoft.Json;
-//using Response = Nancy.Response;
 
 namespace Unit.Tests
 {
