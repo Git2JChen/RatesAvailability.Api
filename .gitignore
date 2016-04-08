@@ -79,6 +79,9 @@ ipch/
 *.vsp
 *.vspx
 
+# Visual Studio 2015
+.vs/config/applicationhost.config
+
 # TFS 2012 Local Workspace
 $tf/
 
