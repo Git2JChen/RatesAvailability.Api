@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
-using Nancy;
+﻿using Nancy;
 using Nancy.Testing;
 using NUnit.Framework;
 using RateAvail.Api;
+using RateAvail.Api.Response;
 
 namespace Unit.Tests
 {
@@ -42,10 +42,5 @@ namespace Unit.Tests
             // Assert
             Assert.That(availJson, Is.TypeOf<Availability>());
         }
-    }
-
-    public class Availability
-    {
-        
     }
 }
