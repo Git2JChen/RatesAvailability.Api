@@ -8,7 +8,7 @@ namespace RateAvail.Api.Response
     public class RatesResponse
     {
         [DataMember]
-        [JsonProperty("availability", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("availabilities", NullValueHandling = NullValueHandling.Ignore)]
         public IList<Availability> Availabilities { get; set; }
     }
 }
