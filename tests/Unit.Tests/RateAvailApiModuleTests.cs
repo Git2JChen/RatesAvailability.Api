@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using Nancy;
 using Nancy.Testing;
 using NUnit.Framework;
@@ -46,28 +47,27 @@ namespace Unit.Tests
         }
 
         [Test]
-        public void Should_return_Availablity_with_JSon_schema_expected()
+        public void Should_return_Availablity_with_startDate_and_endDate_expected()
         {
             // Arrange
             var browser = new Browser(with => with.Module(new RatesAvailModule()));
-            const string jsonStringExpected =
-                "{" +
-                    "\"availability\":[" +
-                        "{" +
-                        "}" +
-                    "]" +
-                "}";
 
             // Act
+            const string StartDateExpected = "2016-01-01";
+            const string EndDateExpected = "2016-12-31";
             var result = browser.Get("/RatesAvail", with =>
             {
-                ;
+                with.Query("sDate", StartDateExpected);
+                with.Query("eDate", EndDateExpected);
             });
 
-            var actualJsonString = JsonConvert.SerializeObject(result.Body.DeserializeJson<RatesResponse>());
+            var ratesResponse = result.Body.DeserializeJson<RatesResponse>();
+            var startDate = ratesResponse.Availabilities[0].StartDate;
+            var endDate = ratesResponse.Availabilities[0].EndDate;
 
             // Assert
-            actualJsonString.Should().Be(jsonStringExpected);
+            Assert.That(startDate, Is.EqualTo(Convert.ToDateTime(StartDateExpected)));
+            Assert.That(endDate, Is.EqualTo(Convert.ToDateTime(EndDateExpected)));
         }
     }
 }

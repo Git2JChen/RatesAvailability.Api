@@ -1,4 +1,7 @@
-﻿using Nancy;
+﻿using System;
+using System.Collections.Generic;
+using Nancy;
+using RateAvail.Api.Response;
 
 namespace RateAvail.Api
 {
@@ -11,22 +14,31 @@ namespace RateAvail.Api
                 return "Nancy.HttpStatusCode is OK";
             };
 
-            Get["/RatesAvail"] = parameters =>
+            Get["/RatesAvail"] = with =>
             {
-                const string ratesAvail =
-                    "{" +
-                        "\"availabilities\":[" +
-                            "{" +
-                                "\"availability\":[" +
-                                    "{" +
-                                    "}" +
-                                "]" +
-                            "}" +
-                        "]" +
-                    "}";
-
-                return ratesAvail;
+                return BuildResponse();
             };
+        }
+
+        private Nancy.Response BuildResponse()
+        {
+            var sDate = Convert.ToDateTime(Request.Query["sDate"].Value);
+            var eDate = Convert.ToDateTime(Request.Query["eDate"].Value);
+            var rateAvailabilities = new List<Availability>
+                {
+                    new Availability
+                    {
+                        StartDate = sDate,
+                        EndDate = eDate,
+                    },
+                };
+
+            var response = new RatesResponse
+            {
+                Availabilities = rateAvailabilities
+            };
+
+            return Response.AsJson(response);
         }
     }
 }
