@@ -69,5 +69,39 @@ namespace Unit.Tests
             Assert.That(startDate, Is.EqualTo(Convert.ToDateTime(StartDateExpected)));
             Assert.That(endDate, Is.EqualTo(Convert.ToDateTime(EndDateExpected)));
         }
+
+        [Test]
+        public void Should_return_Availablity_with_days_in_week_expected()
+        {
+            // Arrange
+            var browser = new Browser(with => with.Module(new RatesAvailModule()));
+
+            // Act
+            const string StartDateExpected = "2016-01-01";
+            const string EndDateExpected = "2016-12-31";
+            var result = browser.Get("/RatesAvail", with =>
+            {
+                with.Query("sDate", StartDateExpected);
+                with.Query("eDate", EndDateExpected);
+            });
+
+            var ratesResponse = result.Body.DeserializeJson<RatesResponse>();
+            var mon = ratesResponse.Availabilities[0].Mon;
+            var tue = ratesResponse.Availabilities[0].Tue;
+            var wed = ratesResponse.Availabilities[0].Wed;
+            var thu = ratesResponse.Availabilities[0].Thu;
+            var fri = ratesResponse.Availabilities[0].Fri;
+            var sat = ratesResponse.Availabilities[0].Sat;
+            var sun = ratesResponse.Availabilities[0].Sun;
+
+            // Assert
+            Assert.That(mon, Is.False);
+            Assert.That(tue, Is.False);
+            Assert.That(wed, Is.False);
+            Assert.That(thu, Is.False);
+            Assert.That(fri, Is.False);
+            Assert.That(sat, Is.False);
+            Assert.That(sun, Is.False);
+        }
     }
 }
