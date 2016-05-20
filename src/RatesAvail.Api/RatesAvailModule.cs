@@ -22,14 +22,12 @@ namespace RateAvail.Api
 
         private Nancy.Response BuildResponse()
         {
-            var sDate = Convert.ToDateTime(Request.Query["sDate"].Value);
-            var eDate = Convert.ToDateTime(Request.Query["eDate"].Value);
             var rateAvailabilities = new List<Availability>
                 {
                     new Availability
                     {
-                        StartDate = sDate,
-                        EndDate = eDate,
+                        StartDate = GetDateFromQuery(Request.Query["sDate"]),
+                        EndDate = GetDateFromQuery(Request.Query["eDate"]),
                     },
                 };
 
@@ -39,6 +37,15 @@ namespace RateAvail.Api
             };
 
             return Response.AsJson(response);
+        }
+
+        private DateTime GetDateFromQuery(dynamic dateQury)
+        {
+            var date = !dateQury.HasValue || string.IsNullOrEmpty(dateQury)
+                ? DateTime.Today
+                : Convert.ToDateTime(dateQury.Value);
+
+            return date;
         }
     }
 }

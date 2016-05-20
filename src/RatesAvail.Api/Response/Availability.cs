@@ -9,7 +9,7 @@ namespace RateAvail.Api.Response
     {
         [DataMember]
         [JsonProperty("startDate", NullValueHandling = NullValueHandling.Ignore)]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         [DataMember]
         [JsonProperty("endDate", NullValueHandling = NullValueHandling.Ignore)]
