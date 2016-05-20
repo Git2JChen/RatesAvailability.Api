@@ -104,8 +104,9 @@ namespace Unit.Tests
             Assert.That(sun, Is.False);
         }
 
-        [TestCase]
-        public void StartDate_in_Availablity_will_default_to_today_if_it_is_unknown()
+        [TestCase("")]
+        [TestCase(null)]
+        public void StartDate_in_Availablity_will_default_to_today_if_it_is_unknown(string dateQuery)
         {
             // Arrange
             var browser = new Browser(with => with.Module(new RatesAvailModule()));
@@ -114,7 +115,7 @@ namespace Unit.Tests
             var startDateExpected = DateTime.Today.ToString("yyyy-MM-dd");
             var result = browser.Get("/RatesAvail", with =>
             {
-                with.Query("sDate", null);
+                with.Query("sDate", dateQuery);
             });
 
             var ratesResponse = result.Body.DeserializeJson<RatesResponse>();
@@ -124,8 +125,9 @@ namespace Unit.Tests
             Assert.That(startDate, Is.EqualTo(Convert.ToDateTime(startDateExpected)));
         }
 
-        [Test]
-        public void EndDate_in_Availablity_will_default_to_today_if_it_is_unknown()
+        [TestCase("")]
+        [TestCase(null)]
+        public void EndDate_in_Availablity_will_default_to_today_if_it_is_unknown(string dateQuery)
         {
             // Arrange
             var browser = new Browser(with => with.Module(new RatesAvailModule()));
@@ -134,7 +136,7 @@ namespace Unit.Tests
             var endDateExpected = DateTime.Today.ToString("yyyy-MM-dd");
             var result = browser.Get("/RatesAvail", with =>
             {
-                with.Query("eDate", null);
+                with.Query("eDate", dateQuery);
             });
 
             var ratesResponse = result.Body.DeserializeJson<RatesResponse>();
