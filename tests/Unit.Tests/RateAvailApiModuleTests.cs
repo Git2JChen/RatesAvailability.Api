@@ -145,5 +145,36 @@ namespace Unit.Tests
             // Assert
             Assert.That(endDate, Is.EqualTo(Convert.ToDateTime(endDateExpected)));
         }
+
+        [Test]
+        public void Should_Map_Availablity_for_each_day_in_the_week()
+        {
+            // Arrange
+            var browser = new Browser(with => with.Module(new RatesAvailModule()));
+
+            // Act
+            var result = browser.Get("/RatesAvail", with =>
+            {
+                with.Query("weekAvail", "1,0,1,0,1,1,1");
+            });
+
+            var ratesResponse = result.Body.DeserializeJson<RatesResponse>();
+            var mon = ratesResponse.Availabilities[0].Mon;
+            var tue = ratesResponse.Availabilities[0].Tue;
+            var wed = ratesResponse.Availabilities[0].Wed;
+            var thu = ratesResponse.Availabilities[0].Thu;
+            var fri = ratesResponse.Availabilities[0].Fri;
+            var sat = ratesResponse.Availabilities[0].Sat;
+            var sun = ratesResponse.Availabilities[0].Sun;
+
+            // Assert
+            Assert.That(mon, Is.True);
+            Assert.That(tue, Is.False);
+            Assert.That(wed, Is.True);
+            Assert.That(thu, Is.False);
+            Assert.That(fri, Is.True);
+            Assert.That(sat, Is.True);
+            Assert.That(sun, Is.True);
+        }
     }
 }
