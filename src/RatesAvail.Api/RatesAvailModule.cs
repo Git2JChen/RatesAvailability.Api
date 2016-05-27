@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Nancy;
+using RateAvail.Api.Model;
 using RateAvail.Api.Response;
 
 namespace RateAvail.Api
@@ -73,16 +74,5 @@ namespace RateAvail.Api
 
             return date;
         }
-    }
-
-    public enum WeekDays
-    {
-        Monday,
-        Tuesday,
-        Wednesday,
-        Thursday,
-        Friday,
-        Saturday,
-        Sunday
     }
 }

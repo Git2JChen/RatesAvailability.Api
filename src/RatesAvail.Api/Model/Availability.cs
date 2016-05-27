@@ -2,7 +2,7 @@ using System;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
-namespace RateAvail.Api.Response
+namespace RateAvail.Api.Model
 {
     [DataContract]
     public class Availability
