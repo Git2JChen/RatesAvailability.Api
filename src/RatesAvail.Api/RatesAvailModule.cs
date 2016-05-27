@@ -17,20 +17,24 @@ namespace RateAvail.Api
 
             Get["/RatesAvail"] = with =>
             {
-                var weekAvail = Request.Query["weekAvail"];
-                var weekAvails = weekAvail.HasValue ? weekAvail.ToString().Split(new [] {','}) : new string[] {};
+                var weekAvails = GetWeekAvailabilities();
 
                 return BuildResponse(weekAvails);
             };
         }
 
+        private dynamic GetWeekAvailabilities()
+        {
+            var weekAvail = Request.Query["weekAvail"];
+            var weekAvails = weekAvail.HasValue
+                ? weekAvail.ToString().Split(new[] {','})
+                : new[] {"0", "0", "0", "0", "0", "0", "0"};
+
+            return weekAvails;
+        }
+
         private Nancy.Response BuildResponse(IEnumerable<string> avails)
         {
-            if (avails == null || !avails.Any())
-            {
-                avails = new [] {"0", "0", "0", "0", "0", "0", "0"};
-            }
-
             var rateAvailabilities = new List<Availability>
                 {
                     new Availability
