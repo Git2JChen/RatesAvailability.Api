@@ -41,13 +41,13 @@ namespace RateAvail.Api
                     {
                         StartDate = GetDateFromQuery(Request.Query["sDate"]),
                         EndDate = GetDateFromQuery(Request.Query["eDate"]),
-                        Mon = avails.ElementAt(0) == "1",
-                        Tue = avails.ElementAt(1) == "1",
-                        Wed = avails.ElementAt(2) == "1",
-                        Thu = avails.ElementAt(3) == "1",
-                        Fri = avails.ElementAt(4) == "1" ,
-                        Sat = avails.ElementAt(5) == "1",
-                        Sun = avails.ElementAt(6) == "1"
+                        Mon = GetAvailabilityByDay(avails, WeekDays.Monday),
+                        Tue = GetAvailabilityByDay(avails, WeekDays.Tuesday),
+                        Wed = GetAvailabilityByDay(avails, WeekDays.Wednesday),
+                        Thu = GetAvailabilityByDay(avails, WeekDays.Thursday),
+                        Fri = GetAvailabilityByDay(avails, WeekDays.Friday),
+                        Sat = GetAvailabilityByDay(avails, WeekDays.Saturday),
+                        Sun = GetAvailabilityByDay(avails, WeekDays.Sunday)
                     },
                 };
 
@@ -59,6 +59,12 @@ namespace RateAvail.Api
             return Response.AsJson(response);
         }
 
+        private static bool GetAvailabilityByDay(IEnumerable<string> avails, WeekDays day)
+        {
+            var index = Convert.ToInt32(day);
+            return avails.ElementAt(index) == "1";
+        }
+
         private DateTime GetDateFromQuery(dynamic dateQury)
         {
             var date = !dateQury.HasValue || string.IsNullOrEmpty(dateQury)
@@ -67,5 +73,16 @@ namespace RateAvail.Api
 
             return date;
         }
+    }
+
+    public enum WeekDays
+    {
+        Monday,
+        Tuesday,
+        Wednesday,
+        Thursday,
+        Friday,
+        Saturday,
+        Sunday
     }
 }
