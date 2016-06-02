@@ -7,8 +7,8 @@
     <ProjectGuid>{9B58BA0A-D151-454A-B015-78EB3FE5EF79}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Unit.Tests</RootNamespace>
-    <AssemblyName>Unit.Tests</AssemblyName>
+    <RootNamespace>RatesAvail.Api.Unit.Tests</RootNamespace>
+    <AssemblyName>RatesAvail.Api.Unit.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

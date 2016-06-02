@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatesAvail.Api", "src\RatesAvail.Api\RatesAvail.Api.csproj", "{ED638DD5-E755-4B7A-940D-5C94AB425686}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit.Tests", "tests\Unit.Tests\Unit.Tests.csproj", "{9B58BA0A-D151-454A-B015-78EB3FE5EF79}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatesAvail.Api.Unit.Tests", "tests\RatesAvail.Api.Unit.Tests\RatesAvail.Api.Unit.Tests.csproj", "{9B58BA0A-D151-454A-B015-78EB3FE5EF79}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F1487CD4-7200-40C4-B019-81A29113F181}"
 EndProject

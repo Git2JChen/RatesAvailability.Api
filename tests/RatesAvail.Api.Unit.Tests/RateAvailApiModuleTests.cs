@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Linq;
-using FluentAssertions;
 using Nancy;
 using Nancy.Testing;
 using NUnit.Framework;
 using RateAvail.Api;
 using RateAvail.Api.Response;
 
-namespace Unit.Tests
+namespace RatesAvail.Api.Unit.Tests
 {
     [TestFixture]
     public class RateAvailApiModuleTests
