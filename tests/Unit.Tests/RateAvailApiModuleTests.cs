@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Linq;
-using CsQuery.ExtensionMethods;
 using FluentAssertions;
 using Nancy;
 using Nancy.Testing;
 using NUnit.Framework;
 using RateAvail.Api;
 using RateAvail.Api.Response;
-using Newtonsoft.Json;
 
 namespace Unit.Tests
 {
