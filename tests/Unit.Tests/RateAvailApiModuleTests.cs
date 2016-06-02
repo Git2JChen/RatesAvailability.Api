@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using CsQuery.ExtensionMethods;
 using FluentAssertions;
 using Nancy;
 using Nancy.Testing;
@@ -146,16 +148,20 @@ namespace Unit.Tests
             Assert.That(endDate, Is.EqualTo(Convert.ToDateTime(endDateExpected)));
         }
 
-        [Test]
-        public void Should_Map_Availablity_for_each_day_in_the_week()
+        [TestCase("1,0,1,0,1,1,1", "True,False,True,False,True,True,True")]
+        [TestCase("0,0,1,0,1,0,1", "False,False,True,False,True,False,True")]
+        [TestCase("1,1,1,0,1,1,0", "True,True,True,False,True,True,False")]
+        public void Should_Map_Availablity_for_each_day_in_the_week(string inputWeekAvail, string expectedWeekAvail)
         {
             // Arrange
+            var expectedResults = expectedWeekAvail.Split(',')
+                                    .Select(Convert.ToBoolean).ToList();
             var browser = new Browser(with => with.Module(new RatesAvailModule()));
 
             // Act
             var result = browser.Get("/RatesAvail", with =>
             {
-                with.Query("weekAvail", "1,0,1,0,1,1,1");
+                with.Query("weekAvail", inputWeekAvail);
             });
 
             var ratesResponse = result.Body.DeserializeJson<RatesResponse>();
@@ -168,13 +174,13 @@ namespace Unit.Tests
             var sun = ratesResponse.Availabilities[0].Sun;
 
             // Assert
-            Assert.That(mon, Is.True);
-            Assert.That(tue, Is.False);
-            Assert.That(wed, Is.True);
-            Assert.That(thu, Is.False);
-            Assert.That(fri, Is.True);
-            Assert.That(sat, Is.True);
-            Assert.That(sun, Is.True);
+            Assert.That(mon, Is.EqualTo(expectedResults[0]));
+            Assert.That(tue, Is.EqualTo(expectedResults[1]));
+            Assert.That(wed, Is.EqualTo(expectedResults[2]));
+            Assert.That(thu, Is.EqualTo(expectedResults[3]));
+            Assert.That(fri, Is.EqualTo(expectedResults[4]));
+            Assert.That(sat, Is.EqualTo(expectedResults[5]));
+            Assert.That(sun, Is.EqualTo(expectedResults[6]));
         }
     }
 }
