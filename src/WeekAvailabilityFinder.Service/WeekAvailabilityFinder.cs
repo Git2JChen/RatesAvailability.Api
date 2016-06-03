@@ -1,16 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WeekAvailabilityFinder.Service
 {
     public class WeekAvailabilityFinder : IWeekAvailabilityFinder
     {
-        public IList<WeekAvailability> Get(DateTime fromDate, DateTime toDate)
+        public IEnumerable<WeekAvailability> Get(DateTime fromDate, DateTime toDate)
         {
-            throw new NotImplementedException();
+            var weekAvailabilities = new List<WeekAvailability>
+                                {
+                                    new WeekAvailability
+                                        {
+                                            Monday = true,
+                                            Tuesday = false,
+                                            Wednesday = true,
+                                            Thursday = false,
+                                            Friday = true,
+                                            Saturday = true,
+                                            Sunday = true
+                                        },
+                                    new WeekAvailability
+                                        {
+                                            Monday = true,
+                                            Tuesday = false,
+                                            Wednesday = true,
+                                            Thursday = false,
+                                            Friday = false,
+                                            Saturday = true,
+                                            Sunday = true
+                                        }
+                                };
+
+            return weekAvailabilities;
         }
     }
 }

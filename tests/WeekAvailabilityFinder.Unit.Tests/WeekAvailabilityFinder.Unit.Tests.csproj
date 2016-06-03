@@ -50,6 +50,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\WeekAvailabilityFinder.Service\WeekAvailabilityFinder.Service.csproj">
+      <Project>{BB4A369E-C152-40BA-9301-227ECB0D11A5}</Project>
+      <Name>WeekAvailabilityFinder.Service</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

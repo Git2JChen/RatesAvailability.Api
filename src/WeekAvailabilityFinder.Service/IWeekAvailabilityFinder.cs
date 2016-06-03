@@ -5,6 +5,6 @@ namespace WeekAvailabilityFinder.Service
 {
     public interface IWeekAvailabilityFinder
     {
-        IList<WeekAvailability> Get(DateTime fromDate, DateTime toDate);
+        IEnumerable<WeekAvailability> Get(DateTime fromDate, DateTime toDate);
     }
 }
