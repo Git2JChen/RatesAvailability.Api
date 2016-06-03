@@ -1,4 +1,6 @@
-﻿namespace WeekAvailabilityFinder.Service
+﻿using System;
+
+namespace WeekAvailabilityFinder.Service
 {
     public class WeekAvailability
     {
@@ -9,5 +11,7 @@
         public bool Friday { get; set; }
         public bool Saturday { get; set; }
         public bool Sunday { get; set; }
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
     }
 }
