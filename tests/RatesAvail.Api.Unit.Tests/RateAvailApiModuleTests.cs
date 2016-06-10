@@ -1,21 +1,48 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Nancy;
 using Nancy.Testing;
 using NUnit.Framework;
 using RateAvail.Api;
 using RateAvail.Api.Response;
+using Rhino.Mocks;
+using WeekAvailabilityFinder.Service;
 
 namespace RatesAvail.Api.Unit.Tests
 {
     [TestFixture]
     public class RateAvailApiModuleTests
     {
+        private IWeekAvailabilityFinder _weekAvailabilityFinder;
+
+        [SetUp]
+        public void SetUp()
+        {
+            var weekAvailabilities = new List<WeekAvailability>
+            {
+                new WeekAvailability
+                {
+                    FromDate = new DateTime(2016, 1, 1),
+                    ToDate = new DateTime(2016, 1, 31)
+                },
+                new WeekAvailability
+                {
+                    FromDate = new DateTime(2016, 2, 1),
+                    ToDate = new DateTime(2016, 12, 31)
+                }
+            };
+            _weekAvailabilityFinder = MockRepository.GenerateMock<IWeekAvailabilityFinder>();
+            _weekAvailabilityFinder.Stub(x => x.Get(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything))
+                .Return(weekAvailabilities);
+        }
+
         [Test]
         public void Should_return_status_ok_when_route_exists()
         {
             // Arrange
-            var browser = new Browser(with => with.Module(new RatesAvailModule()));
+
+            var browser = new Browser(with => with.Module(new RatesAvailModule(_weekAvailabilityFinder)));
 
             // Act
             var result = browser.Get("/", with =>
@@ -31,7 +58,7 @@ namespace RatesAvail.Api.Unit.Tests
         public void Should_return_Response_type()
         {
             // Arrange
-            var browser = new Browser(with => with.Module(new RatesAvailModule()));
+            var browser = new Browser(with => with.Module(new RatesAvailModule(_weekAvailabilityFinder)));
 
             // Act
             var result = browser.Get("/RatesAvail", with =>
@@ -49,31 +76,33 @@ namespace RatesAvail.Api.Unit.Tests
         public void Should_return_Availablity_with_startDate_and_endDate_expected()
         {
             // Arrange
-            var browser = new Browser(with => with.Module(new RatesAvailModule()));
+            var browser = new Browser(with => with.Module(new RatesAvailModule(_weekAvailabilityFinder)));
 
             // Act
-            const string StartDateExpected = "2016-01-01";
-            const string EndDateExpected = "2016-12-31";
+            const string StartDateRequested = "2016-01-01";
+            const string EndDateRequested = "2016-12-31";
+            const string StartDateExpected1 = "2016-01-01";
+            const string EndDateExpected1 = "2016-01-31";
             var result = browser.Get("/RatesAvail", with =>
             {
-                with.Query("sDate", StartDateExpected);
-                with.Query("eDate", EndDateExpected);
+                with.Query("sDate", StartDateRequested);
+                with.Query("eDate", EndDateRequested);
             });
 
             var ratesResponse = result.Body.DeserializeJson<RatesResponse>();
-            var startDate = ratesResponse.Availabilities[0].StartDate;
-            var endDate = ratesResponse.Availabilities[0].EndDate;
+            var startDate1 = ratesResponse.Availabilities[0].StartDate;
+            var endDate1 = ratesResponse.Availabilities[0].EndDate;
 
             // Assert
-            Assert.That(startDate, Is.EqualTo(Convert.ToDateTime(StartDateExpected)));
-            Assert.That(endDate, Is.EqualTo(Convert.ToDateTime(EndDateExpected)));
+            Assert.That(startDate1, Is.EqualTo(Convert.ToDateTime(StartDateExpected1)));
+            Assert.That(endDate1, Is.EqualTo(Convert.ToDateTime(EndDateExpected1)));
         }
 
         [Test]
         public void Should_return_Availablity_with_days_in_week_expected()
         {
             // Arrange
-            var browser = new Browser(with => with.Module(new RatesAvailModule()));
+            var browser = new Browser(with => with.Module(new RatesAvailModule(_weekAvailabilityFinder)));
 
             // Act
             const string StartDateExpected = "2016-01-01";
@@ -108,7 +137,7 @@ namespace RatesAvail.Api.Unit.Tests
         public void StartDate_in_Availablity_will_default_to_today_if_it_is_unknown(string dateQuery)
         {
             // Arrange
-            var browser = new Browser(with => with.Module(new RatesAvailModule()));
+            var browser = new Browser(with => with.Module(new RatesAvailModule(_weekAvailabilityFinder)));
 
             // Act
             var startDateExpected = DateTime.Today.ToString("yyyy-MM-dd");
@@ -126,13 +155,13 @@ namespace RatesAvail.Api.Unit.Tests
 
         [TestCase("")]
         [TestCase(null)]
-        public void EndDate_in_Availablity_will_default_to_today_if_it_is_unknown(string dateQuery)
+        public void EndDate_in_Availablity_will_default_to_2016_01_31_if_it_is_unknown(string dateQuery)
         {
             // Arrange
-            var browser = new Browser(with => with.Module(new RatesAvailModule()));
+            var browser = new Browser(with => with.Module(new RatesAvailModule(_weekAvailabilityFinder)));
 
             // Act
-            var endDateExpected = DateTime.Today.ToString("yyyy-MM-dd");
+            var endDateExpected = new DateTime(2016, 1, 31);
             var result = browser.Get("/RatesAvail", with =>
             {
                 with.Query("eDate", dateQuery);
@@ -153,7 +182,7 @@ namespace RatesAvail.Api.Unit.Tests
             // Arrange
             var expectedResults = expectedWeekAvail.Split(',')
                                     .Select(Convert.ToBoolean).ToList();
-            var browser = new Browser(with => with.Module(new RatesAvailModule()));
+            var browser = new Browser(with => with.Module(new RatesAvailModule(_weekAvailabilityFinder)));
 
             // Act
             var result = browser.Get("/RatesAvail", with =>

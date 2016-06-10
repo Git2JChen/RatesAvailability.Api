@@ -4,12 +4,13 @@ using System.Linq;
 using Nancy;
 using RateAvail.Api.Model;
 using RateAvail.Api.Response;
+using WeekAvailabilityFinder.Service;
 
 namespace RateAvail.Api
 {
     public class RatesAvailModule : NancyModule
     {
-        public RatesAvailModule()
+        public RatesAvailModule(IWeekAvailabilityFinder weekAvailabilityFinder)
         {
             Get["/"] = parameters =>
             {
@@ -18,9 +19,13 @@ namespace RateAvail.Api
 
             Get["/RatesAvail"] = with =>
             {
-                var weekAvails = GetWeekAvailabilities();
+                var dateFrom = new DateTime(2016, 1, 1);
+                var dateTo = new DateTime(2016, 12, 31);
+                var weekAvailsRequested = GetWeekAvailabilities();
+                
+                var weekAvailsInWholeYear = weekAvailabilityFinder.Get(dateFrom, dateTo);
 
-                return BuildResponse(weekAvails);
+                return BuildResponse(weekAvailsRequested, weekAvailsInWholeYear);
             };
         }
 
@@ -34,23 +39,33 @@ namespace RateAvail.Api
             return weekAvails;
         }
 
-        private Nancy.Response BuildResponse(IEnumerable<string> avails)
+        private Nancy.Response BuildResponse(IEnumerable<string> avails, IEnumerable<WeekAvailability> weekAvailabilities)
         {
-            var rateAvailabilities = new List<Availability>
+            var rateAvailabilities = new List<Availability>();
+            var startDateRequested = GetDateFromQuery(Request.Query["sDate"]);
+            var endDateRequested = GetDateFromQuery(Request.Query["eDate"]);
+            var weekweekAvailabilityInWeek1 = weekAvailabilities.ToList()[0];
+            var weekweekAvailabilityInWeek2 = weekAvailabilities.ToList()[1];
+            var availsRequested = avails.Select(StringToBoolean).ToList();
+
+            if (endDateRequested >= weekweekAvailabilityInWeek1.ToDate 
+                    && endDateRequested <= weekweekAvailabilityInWeek2.ToDate)
+            {
+                var availabilityInWeek1 = new Availability
                 {
-                    new Availability
-                    {
-                        StartDate = GetDateFromQuery(Request.Query["sDate"]),
-                        EndDate = GetDateFromQuery(Request.Query["eDate"]),
-                        Mon = GetAvailabilityByDay(avails, WeekDays.Monday),
-                        Tue = GetAvailabilityByDay(avails, WeekDays.Tuesday),
-                        Wed = GetAvailabilityByDay(avails, WeekDays.Wednesday),
-                        Thu = GetAvailabilityByDay(avails, WeekDays.Thursday),
-                        Fri = GetAvailabilityByDay(avails, WeekDays.Friday),
-                        Sat = GetAvailabilityByDay(avails, WeekDays.Saturday),
-                        Sun = GetAvailabilityByDay(avails, WeekDays.Sunday)
-                    },
+                    StartDate = startDateRequested,
+                    EndDate = (DateTime) weekweekAvailabilityInWeek1.ToDate,
+                    Mon = availsRequested[0],
+                    Tue = availsRequested[1],
+                    Wed = availsRequested[2],
+                    Thu = availsRequested[3],
+                    Fri = availsRequested[4],
+                    Sat = availsRequested[5],
+                    Sun = availsRequested[6]
                 };
+
+                rateAvailabilities.Add(availabilityInWeek1);
+            }
 
             var response = new RatesResponse
             {
@@ -60,10 +75,9 @@ namespace RateAvail.Api
             return Response.AsJson(response);
         }
 
-        private static bool GetAvailabilityByDay(IEnumerable<string> avails, WeekDays day)
+        private static bool StringToBoolean(string s)
         {
-            var index = Convert.ToInt32(day);
-            return avails.ElementAt(index) == "1";
+            return s == "1";
         }
 
         private DateTime GetDateFromQuery(dynamic dateQury)
