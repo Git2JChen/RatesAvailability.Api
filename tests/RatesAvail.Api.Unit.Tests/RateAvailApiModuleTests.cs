@@ -174,10 +174,13 @@ namespace RatesAvail.Api.Unit.Tests
             Assert.That(endDate, Is.EqualTo(Convert.ToDateTime(endDateExpected)));
         }
 
+        /* Predefined WeekAvailability  ||-------------|---------------------------||    */
+        /* WeekAvailability requested   |--------|                                       */
+        /* Resultant WeekAvailability   ||-------|-----|---------------------------||    */
         [TestCase("1,0,1,0,1,1,1", "True,False,True,False,True,True,True")]
         [TestCase("0,0,1,0,1,0,1", "False,False,True,False,True,False,True")]
         [TestCase("1,1,1,0,1,1,0", "True,True,True,False,True,True,False")]
-        public void Should_Map_Availablity_for_each_day_in_the_week(string inputWeekAvail, string expectedWeekAvail)
+        public void Should_return_availability_requested_in_first_availability_block_when_request_has_no_date_range(string inputWeekAvail, string expectedWeekAvail)
         {
             // Arrange
             var expectedResults = expectedWeekAvail.Split(',')
@@ -191,13 +194,15 @@ namespace RatesAvail.Api.Unit.Tests
             });
 
             var ratesResponse = result.Body.DeserializeJson<RatesResponse>();
-            var mon = ratesResponse.Availabilities[0].Mon;
-            var tue = ratesResponse.Availabilities[0].Tue;
-            var wed = ratesResponse.Availabilities[0].Wed;
-            var thu = ratesResponse.Availabilities[0].Thu;
-            var fri = ratesResponse.Availabilities[0].Fri;
-            var sat = ratesResponse.Availabilities[0].Sat;
-            var sun = ratesResponse.Availabilities[0].Sun;
+
+            var availabilityBlock1 = ratesResponse.Availabilities[0];
+            var mon = availabilityBlock1.Mon;
+            var tue = availabilityBlock1.Tue;
+            var wed = availabilityBlock1.Wed;
+            var thu = availabilityBlock1.Thu;
+            var fri = availabilityBlock1.Fri;
+            var sat = availabilityBlock1.Sat;
+            var sun = availabilityBlock1.Sun;
 
             // Assert
             Assert.That(mon, Is.EqualTo(expectedResults[0]));
