@@ -10,6 +10,10 @@ namespace RateAvail.Api
 {
     public class RatesAvailModule : NancyModule
     {
+        private readonly int _currentYear = DateTime.Now.Year;
+        private dynamic _startDateRequested;
+        private dynamic _endDateRequested;
+
         public RatesAvailModule(IWeekAvailabilityFinder weekAvailabilityFinder)
         {
             Get["/"] = parameters =>
@@ -19,11 +23,11 @@ namespace RateAvail.Api
 
             Get["/RatesAvail"] = with =>
             {
-                var dateFrom = new DateTime(2016, 1, 1);
-                var dateTo = new DateTime(2016, 12, 31);
                 var weekAvailsRequested = GetWeekAvailabilities();
-                
-                var weekAvailsInWholeYear = weekAvailabilityFinder.Get(dateFrom, dateTo);
+                _startDateRequested = GetDateFromQuery(Request.Query["sDate"]);
+                _endDateRequested = GetDateFromQuery(Request.Query["eDate"]);
+
+                var weekAvailsInWholeYear = weekAvailabilityFinder.Get(_startDateRequested, _endDateRequested);
 
                 return BuildResponse(weekAvailsRequested, weekAvailsInWholeYear);
             };
@@ -42,18 +46,16 @@ namespace RateAvail.Api
         private Nancy.Response BuildResponse(IEnumerable<string> avails, IEnumerable<WeekAvailability> weekAvailabilities)
         {
             var rateAvailabilities = new List<Availability>();
-            var startDateRequested = GetDateFromQuery(Request.Query["sDate"]);
-            var endDateRequested = GetDateFromQuery(Request.Query["eDate"]);
             var weekweekAvailabilityInWeek1 = weekAvailabilities.ToList()[0];
             var weekweekAvailabilityInWeek2 = weekAvailabilities.ToList()[1];
             var availsRequested = avails.Select(StringToBoolean).ToList();
 
-            if (endDateRequested >= weekweekAvailabilityInWeek1.ToDate 
-                    && endDateRequested <= weekweekAvailabilityInWeek2.ToDate)
+            if (_endDateRequested >= weekweekAvailabilityInWeek1.ToDate 
+                    && _endDateRequested <= weekweekAvailabilityInWeek2.ToDate)
             {
                 var availabilityInWeek1 = new Availability
                 {
-                    StartDate = startDateRequested,
+                    StartDate = _startDateRequested,
                     EndDate = (DateTime) weekweekAvailabilityInWeek1.ToDate,
                     Mon = availsRequested[0],
                     Tue = availsRequested[1],

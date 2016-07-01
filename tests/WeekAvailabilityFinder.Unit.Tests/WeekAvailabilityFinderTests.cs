@@ -120,5 +120,23 @@ namespace WeekAvailabilityFinder.Unit.Tests
             // Assert
             actual[1].ShouldBeEquivalentTo(expected[1]);
         }
+
+        /* Predefined WeekAvailability  ||-------------|---------------------------||    */
+        /* WeekAvailability requested   |--------|                                       */
+        /* Resultant WeekAvailability   ||-------|-----|---------------------------||    */
+        [Test]
+        public void will_return_WeekAvailability_element_when_availability_request_is_at_start_of_year()
+        {
+            // Arrange
+            var startDate = new DateTime(_currentYear, 1, 1);
+            var endtDate = new DateTime(_currentYear, 1, 10);
+            var weekAvailabilityFinder = new Service.WeekAvailabilityFinder();
+
+            // Act
+            var actual = weekAvailabilityFinder.Get(startDate, endtDate).ToList();
+
+            // Assert
+            actual.Count.ShouldBeEquivalentTo(3);
+        }
     }
 }

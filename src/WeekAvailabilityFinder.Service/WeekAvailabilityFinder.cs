@@ -7,14 +7,14 @@ namespace WeekAvailabilityFinder.Service
     {
         private WeekAvailability _availType1DefinedInCurrentYear;
         private WeekAvailability _availType2DefinedInCurrentYear;
+        private int _currentYear =  DateTime.Now.Year;
 
         public WeekAvailabilityFinder()
         {
-            var currentYear = DateTime.Now.Year;
             _availType1DefinedInCurrentYear = new WeekAvailability
                     {
-                        FromDate = new DateTime(currentYear, 1, 1),
-                        ToDate = new DateTime(currentYear, 1, 31),
+                        FromDate = new DateTime(_currentYear, 1, 1),
+                        ToDate = new DateTime(_currentYear, 1, 31),
                         Monday = true,
                         Tuesday = false,
                         Wednesday = true,
@@ -26,8 +26,8 @@ namespace WeekAvailabilityFinder.Service
 
             _availType2DefinedInCurrentYear = new WeekAvailability
                     {
-                        FromDate = new DateTime(currentYear, 2, 1),
-                        ToDate = new DateTime(currentYear, 12, 31),
+                        FromDate = new DateTime(_currentYear, 2, 1),
+                        ToDate = new DateTime(_currentYear, 12, 31),
                         Monday = true,
                         Tuesday = false,
                         Wednesday = true,
@@ -40,11 +40,21 @@ namespace WeekAvailabilityFinder.Service
 
         public IEnumerable<WeekAvailability> Get(DateTime fromDate, DateTime toDate)
         {
-            var weekAvailabilities = new List<WeekAvailability>
-                    {
-                        _availType1DefinedInCurrentYear,
-                        _availType2DefinedInCurrentYear
-                    };
+            var weekAvailabilities = new List<WeekAvailability>();
+
+            if (fromDate >= _availType1DefinedInCurrentYear.FromDate.Value 
+                && toDate <= _availType1DefinedInCurrentYear.ToDate.Value)
+            {
+                var weekAvailRequested = new WeekAvailability
+                {
+                    FromDate = fromDate,
+                    ToDate = toDate
+                };
+                weekAvailabilities.Add(weekAvailRequested);
+            }
+
+            weekAvailabilities.Add(_availType1DefinedInCurrentYear);
+            weekAvailabilities.Add(_availType2DefinedInCurrentYear);
 
             return weekAvailabilities;
         }

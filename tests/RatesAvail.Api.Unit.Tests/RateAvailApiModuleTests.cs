@@ -183,11 +183,12 @@ namespace RatesAvail.Api.Unit.Tests
         [TestCase("1,0,1,0,1,1,1", "True,False,True,False,True,True,True")]
         [TestCase("0,0,1,0,1,0,1", "False,False,True,False,True,False,True")]
         [TestCase("1,1,1,0,1,1,0", "True,True,True,False,True,True,False")]
-        public void Should_return_availability_requested_in_first_availability_block_when_request_has_no_date_range(string inputWeekAvail, string expectedWeekAvail)
+        public void Should_return_availability_requested_in_first_availability_block_when_request_has_no_date_range(
+            string inputWeekAvail, string expectedWeekAvail)
         {
             // Arrange
             var expectedResults = expectedWeekAvail.Split(',')
-                                    .Select(Convert.ToBoolean).ToList();
+                .Select(Convert.ToBoolean).ToList();
             var browser = new Browser(with => with.Module(new RatesAvailModule(_weekAvailabilityFinder)));
 
             // Act
@@ -199,26 +200,26 @@ namespace RatesAvail.Api.Unit.Tests
             var ratesResponse = result.Body.DeserializeJson<RatesResponse>();
             var availabilityType1 = ratesResponse.Availabilities[0];
 
-            var availTypeInResponse = new []
-                    {
-                        availabilityType1.Mon,
-                        availabilityType1.Tue,
-                        availabilityType1.Wed,
-                        availabilityType1.Thu,
-                        availabilityType1.Fri,
-                        availabilityType1.Sat,
-                        availabilityType1.Sun
-                    };
-            var availTypeExpected = new []
-                    {
-                        expectedResults[0],
-                        expectedResults[1],
-                        expectedResults[2],
-                        expectedResults[3],
-                        expectedResults[4],
-                        expectedResults[5],
-                        expectedResults[6]
-                    };
+            var availTypeInResponse = new[]
+            {
+                availabilityType1.Mon,
+                availabilityType1.Tue,
+                availabilityType1.Wed,
+                availabilityType1.Thu,
+                availabilityType1.Fri,
+                availabilityType1.Sat,
+                availabilityType1.Sun
+            };
+            var availTypeExpected = new[]
+            {
+                expectedResults[0],
+                expectedResults[1],
+                expectedResults[2],
+                expectedResults[3],
+                expectedResults[4],
+                expectedResults[5],
+                expectedResults[6]
+            };
 
             // Assert
             availTypeInResponse.ShouldAllBeEquivalentTo(availTypeExpected);
