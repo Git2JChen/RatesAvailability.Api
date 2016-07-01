@@ -16,21 +16,23 @@ namespace RatesAvail.Api.Unit.Tests
     public class RateAvailApiModuleTests
     {
         private IWeekAvailabilityFinder _weekAvailabilityFinder;
+        private int _currentYear;
 
         [SetUp]
         public void SetUp()
         {
+            _currentYear = DateTime.Now.Year;
             var weekAvailabilities = new List<WeekAvailability>
             {
                 new WeekAvailability
                 {
-                    FromDate = new DateTime(2016, 1, 1),
-                    ToDate = new DateTime(2016, 1, 31)
+                    FromDate = new DateTime(_currentYear, 1, 1),
+                    ToDate = new DateTime(_currentYear, 1, 31)
                 },
                 new WeekAvailability
                 {
-                    FromDate = new DateTime(2016, 2, 1),
-                    ToDate = new DateTime(2016, 12, 31)
+                    FromDate = new DateTime(_currentYear, 2, 1),
+                    ToDate = new DateTime(_currentYear, 12, 31)
                 }
             };
             _weekAvailabilityFinder = MockRepository.GenerateMock<IWeekAvailabilityFinder>();
@@ -80,14 +82,14 @@ namespace RatesAvail.Api.Unit.Tests
             var browser = new Browser(with => with.Module(new RatesAvailModule(_weekAvailabilityFinder)));
 
             // Act
-            const string StartDateRequested = "2016-01-01";
-            const string EndDateRequested = "2016-12-31";
-            const string StartDateExpected1 = "2016-01-01";
-            const string EndDateExpected1 = "2016-01-31";
+            var startDateRequested = _currentYear + "-01-01";
+            var endDateRequested = _currentYear + "-12-31";
+            var startDateExpected1 = _currentYear + "-01-01";
+            var endDateExpected1 = _currentYear + "-01-31";
             var result = browser.Get("/RatesAvail", with =>
             {
-                with.Query("sDate", StartDateRequested);
-                with.Query("eDate", EndDateRequested);
+                with.Query("sDate", startDateRequested);
+                with.Query("eDate", endDateRequested);
             });
 
             var ratesResponse = result.Body.DeserializeJson<RatesResponse>();
@@ -95,8 +97,8 @@ namespace RatesAvail.Api.Unit.Tests
             var endDate1 = ratesResponse.Availabilities[0].EndDate;
 
             // Assert
-            Assert.That(startDate1, Is.EqualTo(Convert.ToDateTime(StartDateExpected1)));
-            Assert.That(endDate1, Is.EqualTo(Convert.ToDateTime(EndDateExpected1)));
+            Assert.That(startDate1, Is.EqualTo(Convert.ToDateTime(startDateExpected1)));
+            Assert.That(endDate1, Is.EqualTo(Convert.ToDateTime(endDateExpected1)));
         }
 
         [Test]
@@ -106,12 +108,12 @@ namespace RatesAvail.Api.Unit.Tests
             var browser = new Browser(with => with.Module(new RatesAvailModule(_weekAvailabilityFinder)));
 
             // Act
-            const string StartDateExpected = "2016-01-01";
-            const string EndDateExpected = "2016-12-31";
+            var startDateExpected = _currentYear + "-01-01";
+            var endDateExpected = _currentYear + "-12-31";
             var result = browser.Get("/RatesAvail", with =>
             {
-                with.Query("sDate", StartDateExpected);
-                with.Query("eDate", EndDateExpected);
+                with.Query("sDate", startDateExpected);
+                with.Query("eDate", endDateExpected);
             });
 
             var ratesResponse = result.Body.DeserializeJson<RatesResponse>();
@@ -156,13 +158,13 @@ namespace RatesAvail.Api.Unit.Tests
 
         [TestCase("")]
         [TestCase(null)]
-        public void EndDate_in_Availablity_will_default_to_2016_01_31_if_it_is_unknown(string dateQuery)
+        public void EndDate_in_Availablity_will_default_to_01_31_if_it_is_unknown(string dateQuery)
         {
             // Arrange
             var browser = new Browser(with => with.Module(new RatesAvailModule(_weekAvailabilityFinder)));
 
             // Act
-            var endDateExpected = new DateTime(2016, 1, 31);
+            var endDateExpected = new DateTime(_currentYear, 1, 31);
             var result = browser.Get("/RatesAvail", with =>
             {
                 with.Query("eDate", dateQuery);
