@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 using Nancy;
 using Nancy.Testing;
 using NUnit.Framework;
@@ -194,24 +195,31 @@ namespace RatesAvail.Api.Unit.Tests
             });
 
             var ratesResponse = result.Body.DeserializeJson<RatesResponse>();
+            var availabilityType1 = ratesResponse.Availabilities[0];
 
-            var availabilityBlock1 = ratesResponse.Availabilities[0];
-            var mon = availabilityBlock1.Mon;
-            var tue = availabilityBlock1.Tue;
-            var wed = availabilityBlock1.Wed;
-            var thu = availabilityBlock1.Thu;
-            var fri = availabilityBlock1.Fri;
-            var sat = availabilityBlock1.Sat;
-            var sun = availabilityBlock1.Sun;
+            var availTypeInResponse = new []
+                    {
+                        availabilityType1.Mon,
+                        availabilityType1.Tue,
+                        availabilityType1.Wed,
+                        availabilityType1.Thu,
+                        availabilityType1.Fri,
+                        availabilityType1.Sat,
+                        availabilityType1.Sun
+                    };
+            var availTypeExpected = new []
+                    {
+                        expectedResults[0],
+                        expectedResults[1],
+                        expectedResults[2],
+                        expectedResults[3],
+                        expectedResults[4],
+                        expectedResults[5],
+                        expectedResults[6]
+                    };
 
             // Assert
-            Assert.That(mon, Is.EqualTo(expectedResults[0]));
-            Assert.That(tue, Is.EqualTo(expectedResults[1]));
-            Assert.That(wed, Is.EqualTo(expectedResults[2]));
-            Assert.That(thu, Is.EqualTo(expectedResults[3]));
-            Assert.That(fri, Is.EqualTo(expectedResults[4]));
-            Assert.That(sat, Is.EqualTo(expectedResults[5]));
-            Assert.That(sun, Is.EqualTo(expectedResults[6]));
+            availTypeInResponse.ShouldAllBeEquivalentTo(availTypeExpected);
         }
     }
 }
