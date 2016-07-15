@@ -42,20 +42,28 @@ namespace WeekAvailabilityFinder.Service
         {
             var weekAvailabilities = new List<WeekAvailability>();
 
-            if (fromDate >= _availType1DefinedInCurrentYear.FromDate.Value 
+            if (fromDate == _availType1DefinedInCurrentYear.FromDate.Value 
                 && toDate <= _availType1DefinedInCurrentYear.ToDate.Value)
             {
-                var weekAvailRequested = new WeekAvailability
-                {
-                    FromDate = fromDate,
-                    ToDate = toDate
-                };
+                var weekAvailRequested = CopyValueOf(_availType1DefinedInCurrentYear);
+                weekAvailRequested.FromDate = _availType1DefinedInCurrentYear.FromDate;
+                weekAvailRequested.ToDate = toDate;
                 weekAvailabilities.Add(weekAvailRequested);
+
+                var weekAvailType1 = CopyValueOf(_availType1DefinedInCurrentYear);
+                weekAvailType1.FromDate = toDate;
+                weekAvailType1.ToDate = _availType1DefinedInCurrentYear.ToDate;
+                weekAvailabilities.Add(weekAvailType1);
+
+                var weekAvailType2 = CopyValueOf(_availType2DefinedInCurrentYear);
+                weekAvailabilities.Add(weekAvailType2);
             }
-
-            weekAvailabilities.Add(_availType1DefinedInCurrentYear);
-            weekAvailabilities.Add(_availType2DefinedInCurrentYear);
-
+            else
+            {
+                weekAvailabilities.Add(_availType1DefinedInCurrentYear);
+                weekAvailabilities.Add(_availType2DefinedInCurrentYear);
+            }
+            
             return weekAvailabilities;
         }
 
@@ -69,6 +77,25 @@ namespace WeekAvailabilityFinder.Service
                         _availType2DefinedInCurrentYear
                     };
             }
+        }
+
+        private WeekAvailability CopyValueOf(WeekAvailability weekAvailCopied)
+        {
+            var copyOfObject = new WeekAvailability
+            {
+                FromDate = weekAvailCopied.FromDate,
+                ToDate = weekAvailCopied.ToDate,
+                Monday = weekAvailCopied.Monday,
+                Tuesday = weekAvailCopied.Tuesday,
+                Wednesday = weekAvailCopied.Wednesday,
+                Thursday = weekAvailCopied.Thursday,
+                Friday = weekAvailCopied.Friday,
+                Saturday = weekAvailCopied.Saturday,
+                Sunday = weekAvailCopied.Sunday
+            };
+
+            return copyOfObject;
+
         }
     }
 }
